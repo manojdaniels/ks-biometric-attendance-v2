@@ -1,0 +1,135 @@
+/* Container Styling */
+.body{
+  overflow-y: hidden;
+}
+.attendance-cont {
+    padding: .3rem 2rem 2rem 2rem;
+    width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+  }
+  
+  /* Header Styling */
+  .atndnchead {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  /* Table Styling */
+  .atndncTbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Table Header Row */
+  .atndncTbl thead {
+    background-color: #f5f5f5;
+  }
+  .atndncTbl th{
+    border: 1px solid red;
+    padding: .9rem;
+    text-align: center;
+  }
+  
+  .atndncehd1{
+    border: 1px solid red;
+    padding: .5rem ;
+    text-align: center;
+  }
+  
+  /* Hover effect on rows */
+  .atndncTbl tbody tr:hover {
+    background-color: #f0f8ff;
+  }
+  
+  /* Optional shared class if used */
+  .atndncehd {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  /* Button container inside table cell */
+  .btn-view {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  /* Individual button wrapper */
+  .btn2 {
+    padding: 0.3rem;
+  }
+  
+  /* View/Delete buttons */
+  .view-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #007bff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .view-btn:hover {
+    color: #0056b3;
+    transform: scale(1.1);
+  }
+  
+  /* Loading & Error States */
+  
+  .error {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    color: #666;
+  }
+  .action{
+    text-align: center;
+  }
+  .alignment{
+    display: flex;
+    justify-content:space-between;
+  
+  }
+
+  .btndownload{
+  
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+   
+   color:var(--btnTextColor) !important;
+
+
+  }
+
+ 
+  .icon{
+    border: 2px solid black;
+
+    
+  }
+  .right-align {
+    background-color: var(--btnColor);
+    /* color:var(--btntextColor); */
+    border-radius: .4rem;
+    
+
+        padding: .2rem .6rem;
+  }
+  .right-align:hover {
+    background-color: var(--btnHoverColor);
+    /* color: var(--btnTextColor); */
+  }
+  .left-align {
+    padding:.2rem .6rem;
+    /* border :2px solid black */
+  }
+  .left-align input{
+    padding:.2rem .8rem;
+  }
+  

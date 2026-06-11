@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Secrets
+.env
+credentials.json
+secrets.json
+
+# IDE
+.vscode/
+.idea/
+
+# AI/ML
+data/
+datasets/
+models/
+weights/
+
+# Logs
+*.log

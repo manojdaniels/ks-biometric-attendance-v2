@@ -1,0 +1,52 @@
+.dash-card-cont {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    /* border: 2px solid black; */
+    width: 220px; /* Use fixed or min-width to avoid shrinking */
+    height: 22vh;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+    box-sizing: border-box;
+    padding: 15px;
+    margin: 10px;
+    background-color: #fff;
+    transition: transform 0.2s ease-in-out;
+}
+
+.dash-card-cont:hover {
+    transform: translateY(-5px);
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.value {
+    font-size: 1rem;
+    text-transform: capitalize;
+}
+
+.card-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    color:rgb(169, 77, 20);
+}
+
+.card-values {
+    display: flex;
+    justify-content: space-between;
+    
+}
+.value{
+  margin:0rem 3rem;
+  font-size: 1.6rem;
+
+  
+}
+.icon-card{
+    color:#2d4d8d;
+}

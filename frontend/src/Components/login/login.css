@@ -1,0 +1,109 @@
+.login-cont {
+  /* border:2px solid black; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 98%;
+  height: 96vh;
+}
+
+.log-field {
+  display: block;
+  /* border: 1px solid black; */
+  width: 18.75rem;
+  height: auto;
+  border-radius: .8rem;
+  box-shadow: 0px 10px 5px 0px #00000042;
+  max-width: 100%;
+}
+
+.head {
+   /* width:24vw; */
+   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border:1px solid black ;
+  text-transform: uppercase;
+ background-color: var(--btnColor);
+ padding:1.5rem;
+ border-radius: 1.25rem 1.25rem 0 0;
+ color:white;
+}
+.authBox{
+  padding: 1.6rem 1.2rem;
+}
+.field2{
+  position: relative;
+  padding-bottom: 15px;
+}
+.field2 input {
+ border: 1px solid #ced4da;
+  padding: 10px 40px 10px 10px; 
+  background-clip: padding-box;
+   width: 100%;
+  outline: 0;
+  border-radius: 4px;
+  font-size: .9rem;
+}
+
+.forgot {
+  margin: 0rem 0rem 0rem 0.2rem;
+  font-size: 0.8rem;
+  color: blue;
+  cursor: pointer;
+}
+
+.btn {
+  width: 100%;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: var(--btnColor);
+    color:var(--btnTextColor);
+    font-size: 1.2rem;
+    align-items: center;
+    padding: 10px 20px;
+}
+.btn:hover{
+  background-color: var(--btnHoverColor);
+  cursor: pointer;
+}
+.para {
+  /* border:2px solid black; */
+  padding:0 0 0 .5rem;
+  
+}
+.para .para1 {
+  font-size: 0.8rem;
+  MARGIN-BOTTOM: 0;
+}
+
+.forget {
+  font-size: 0.8rem;
+  color: blue;
+  padding-bottom: 15px;
+  display: block;
+  cursor: pointer;
+  margin-right:8.8rem;
+}
+.login-error {
+  font-size: 0.8rem;
+
+  color: #bc2626;
+  /* margin: 0.05rem 0rem 0.2rem 0.5rem; */
+  margin-top: 0rem;
+}
+.pass-toggle{
+  position: absolute;
+  top: 40%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  font-size: 20px;
+
+}
+
+.login_head{
+  font-size: 2rem;
+}

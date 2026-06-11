@@ -1,0 +1,94 @@
+.add-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;     
+  padding-top:1.7rem;         /* space between fields */
+
+}
+.add-user-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  /* padding: 1rem; */
+
+}
+.add-user-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* padding: 10px; */
+}
+
+
+.add-user-form .MuiTextField-root {
+  width: 100%;
+
+}
+
+
+.MuiDialogActions-root button {
+  font-weight: bold;
+  padding: 8px 20px;
+}
+
+
+.MuiDialogTitle-root {
+  font-weight: 600;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+
+/* .MuiDialogContent-root {
+  padding: 3.5rem;
+} */
+
+/* On smaller screens */
+@media screen and (max-width: 600px) {
+  .add-user-form form {
+    padding: 5px;
+  }
+
+  .MuiDialogTitle-root {
+    font-size: 1.25rem;
+  }
+}
+
+.user-field{
+    display: flex;
+    justify-content:space-evenly;
+    align-items: center;
+    gap:1rem;
+}
+#responsive-dialog-title {
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--btnColor);
+  color:var(--btnTextColor);
+  border-radius:.26rem .26rem 0 0;
+  padding:1.2rem;
+}
+
+.user_btn {
+  color: white !important;
+  /* border:2px solid black !important; */
+  background-color: var(--btnColor) !important;
+  font-weight: bold;
+  padding: 6px 16px;
+  margin: 4px;
+  border-radius: 4px;
+}
+
+.user_btn:hover{
+    background-color: var(--btnHoverColor) !important;
+}
+
+
+.save-btn:disabled{
+  background-color: var(--btnDisabled) !important;
+}
+
+.uploadbtn{
+display:flex;
+justify-content: flex-start;
+}

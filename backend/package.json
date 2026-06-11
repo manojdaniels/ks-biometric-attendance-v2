@@ -1,0 +1,42 @@
+{
+  "name": "attendance",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "pretty": "prettier ./*/*/*.js --write"
+  },
+  "keywords": [],
+  "author": "Vidhi Goyal",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.5",
+    "bcrypt": "^5.1.1",
+    "browserify-zlib": "^0.2.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "fs-extra": "^11.3.1",
+    "helmet": "^8.1.0",
+    "i": "^0.3.7",
+    "json2csv": "^6.0.0-alpha.2",
+    "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.5.48",
+    "mongoose": "^8.12.1",
+    "morgan": "^1.10.0",
+    "mqtt": "^5.14.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
+    "path": "^0.12.7",
+    "stream-browserify": "^3.0.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prettier": "^3.5.3"
+  }
+}

@@ -1,0 +1,82 @@
+/* .add-camera-container{
+    border:2px solid black;
+   
+     background-color: var(--btnColor);
+     border-radius:.3rem;
+    
+    
+}
+
+.add-camera-container Button{
+    width:100%;
+    padding:.7rem;
+   color:var(--btnTextColor)
+}
+
+.add-camera{
+    padding:1rem .8rem;
+}
+
+.camera{
+    width:100%;
+    padding:1rem;
+} */
+
+
+/* addCamera.css */
+
+.add-camera-container {
+  display: flex;
+  justify-content: flex-end;
+  width:100%;
+  height:100%;
+
+
+
+}
+
+.add-camera-container Button{
+    background-color: var(--btnColor);
+    color:var(--btnTextColor);
+    padding:.4rem .7rem;
+}
+
+.add-camera {
+  padding:1.6rem 1rem 0  1rem;
+}
+
+.add-camera-input {
+  display: flex;
+
+  flex-direction: column;
+  margin-top:.6rem;
+}
+
+.camera {
+  width: 100%;
+  height:20%;
+}
+
+/* Optional: Style the dialog */
+/* .MuiDialog-paper {
+  border-radius: 16px;
+  padding: 20px;
+} */
+
+.buttoncamera{
+  /* border:2px solid black; */
+  background-color: var(--btnColor);
+  /* color:var(--btnTextColor) !important; */
+  border-radius:.4rem;
+}
+
+.camera_cancel{
+  color:var(--btnTextColor) !important ;
+}
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .add-camera {
+    min-width: 100%;
+    padding: 0;
+  }
+}

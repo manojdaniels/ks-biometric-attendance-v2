@@ -1,0 +1,15 @@
+
+.subadmin-cards{
+    
+    width:100%;
+    height:100%;
+    /* padding-top:1rem; */
+  }
+
+  .subadmin-dash-card{
+    display: flex;
+    justify-content: space-between;
+    padding:.4rem 9rem;
+   
+  }
+  

@@ -1,0 +1,20 @@
+.drawer-paper {
+  box-sizing: border-box;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;;
+  font-weight: bold;
+  font-size: 1.7rem;
+  
+  background-color: var(--navColor) !important;
+}
+
+.drawer-icon {
+  margin-right: 10px;
+  color: #1976d2;
+}
+

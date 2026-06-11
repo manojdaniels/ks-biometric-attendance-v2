@@ -1,0 +1,20 @@
+Technical Documentation:
+
+1. HW usage:
+	- GPU, CPU & Memory consumption
+
+Analysis:
+	
+GPU:
+Normal condition: 2-3%
+Detection: 2-3%
+
+(Previously it was around 70-80% of CPU, now it is consuming between 30-40% of GPU while face detection process.) In normal condition, it uses 3-5% of GPU. )
+
+CPU:
+Normal condition: 6-15%
+Detection: 20-45%
+
+
+
+  

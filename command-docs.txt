@@ -1,0 +1,23 @@
+VPN OFF>>> Important 
+
+backend: nodemon start
+frontend: npm run dev 
+
+cd att
+>>>Activate env
+
+python -m venv venv
+.\venv\Scripts\activate.bat
+
+
+python /src/modeltry1
+
+
+
+-------------------------------------
+MongoDB SQL query: 
+{ "entryTime": -1 }
+
+Specific time:
+
+{ "entryTime": { "$gte": { "$date": "2026-05-26T00:00:00Z" } } }

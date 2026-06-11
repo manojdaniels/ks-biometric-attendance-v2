@@ -1,0 +1,33 @@
+
+.admin-cards{
+    
+    width:100%;
+    height:100%;
+    /* padding-top:4rem; */
+  }
+
+  .admin-dash-card{
+    display: flex;
+    justify-content: space-between;
+    padding:0 18rem;
+   
+  }
+  .admin-pie{
+    margin:1rem;
+    
+    
+  }
+  .add_user{
+     display: flex;
+  justify-content: flex-end;
+  padding: .2rem 1.4rem;
+   
+  }
+  .add_user button {
+  background-color: var(--btnColor); /* MUI blue */
+  color: white;
+}
+
+.add_user button:hover{
+  background-color: var(--btnHoverColor);;
+}

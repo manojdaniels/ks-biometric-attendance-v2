@@ -1,0 +1,26 @@
+
+  
+  .signup-error{
+    font-size: .8rem;
+   
+    color: #bc2626;
+    /* margin: .2rem 0rem .2rem .5rem; */
+  }
+  .log-field1{
+   
+      display: block;
+      /* border: 1px solid black; */
+      width: 18.75rem;
+      height: auto;
+      border-radius: .8rem;
+      box-shadow: 0px 10px 5px 0px #00000042;
+      max-width: 100%;
+  
+}
+.success{
+  font-size: .8rem;
+   
+    color: rgb(29, 197, 29);
+    /* margin: .2rem 0rem .2rem .5rem; */
+    margin-top: 0;
+  }
