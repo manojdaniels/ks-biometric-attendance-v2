@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Secrets
+.env
+credentials.json
+secrets.json
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# AI/ML
+data/
+datasets/
+models/
+weights/
+
+# OS Files
+.DS_Store
+Thumbs.db
