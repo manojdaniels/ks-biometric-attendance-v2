@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
 *.pyc
@@ -24,3 +25,35 @@ weights/
 
 # Logs
 *.log
+=======
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Secrets
+.env
+credentials.json
+secrets.json
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# AI/ML
+data/
+datasets/
+models/
+weights/
+
+# OS Files
+.DS_Store
+Thumbs.db
+>>>>>>> 4127487e6fcf5653d6c0d80601d17cc6e224bd6e
