@@ -10,6 +10,7 @@ exports.adminCreated=async()=>{
     const admin= new User({
         name:process.env.ADMIN_NAME,
         email:process.env.EMAIL,   // xyz@gmail.com;
+ 	address: process.env.ADMIN_ADDRESS,
         password:process.env.PASSWORD, // 123456789
         phoneNumber:process.env.PHONENUMBER,//7300758082
         role:"admin" //admin
@@ -24,6 +25,7 @@ exports.adminCreated=async()=>{
  return; 
     }
     catch(err){
-     console.error("Admin not created");
+     //console.error("Admin not created");
+     console.error(err);
     }
 }

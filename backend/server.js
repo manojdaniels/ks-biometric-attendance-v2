@@ -1,4 +1,6 @@
 require("dotenv").config()
+console.log("ENV FILE LOADED");
+console.log("MongoDB_URI =", process.env.MongoDB_URI);
 const express=require("express")
 const cors=require("cors")
 // const multer=require("multer")

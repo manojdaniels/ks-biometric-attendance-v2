@@ -6,14 +6,22 @@ import numpy as np
 import time
 import struct
 import threading
+
 from datetime import datetime
 from multiprocessing import Process, Event, Queue, shared_memory
-from camera_connect import connect_camera, kill_process_tree
-from stten import initialize_attendance_file, mark_attendance
+
 from dotenv import load_dotenv
+
+from camera_connect import connect_camera, kill_process_tree
+from backend_api import send_attendance_to_backend
+
 load_dotenv()
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 
 FRAME_WIDTH = 640
 FRAME_HEIGHT = 480
@@ -167,34 +175,71 @@ def recognition_process_loop(names_list, shm_names, result_queue, shutdown_event
 
 
 def attendance_manager(result_queue, shutdown_event):
-    attendance_file = "attendance.csv"
-    attendance_df = initialize_attendance_file(attendance_file)
+    """
+    Receives recognition events and stores attendance in MongoDB.
+    Prevents duplicate ENTRY/EXIT events using a cooldown.
+    """
+
     last_entry = {}
     last_exit = {}
+
     COOLDOWN = 5  # seconds
 
     while not shutdown_event.is_set():
+
         try:
             data = result_queue.get(timeout=1)
-            if data["type"] == "detection":
-                name = data["name"]
-                camera = data["camera"]
-                timestamp = data["timestamp"]
-
-                if camera == "ENTRY CAMERA":
-                    if name not in last_entry or (timestamp - last_entry[name]).total_seconds() > COOLDOWN:
-                        logging.info(f"Marking ENTRY for {name}")
-                        attendance_df = mark_attendance(attendance_df, attendance_file, name, entry_time=timestamp)
-                        last_entry[name] = timestamp
-
-                elif camera == "EXIT CAMERA":
-                    if name not in last_exit or (timestamp - last_exit[name]).total_seconds() > COOLDOWN:
-                        logging.info(f"Marking EXIT for {name}")
-                        attendance_df = mark_attendance(attendance_df, attendance_file, name, exit_time=timestamp)
-                        last_exit[name] = timestamp
 
         except Exception:
-            pass
+            continue
+
+        if data.get("type") != "detection":
+            continue
+
+        name = data["name"]
+        camera = data["camera"]
+        timestamp = data["timestamp"]
+
+        # ---------------- ENTRY ----------------
+
+        if camera == "ENTRY CAMERA":
+
+            if (
+                name not in last_entry
+                or (timestamp - last_entry[name]).total_seconds() > COOLDOWN
+            ):
+
+                logging.info(f"[ENTRY] {name}")
+
+                send_attendance_to_backend(
+                    name=name,
+                    event_type="entry",
+                    timestamp=timestamp,
+                )
+
+                last_entry[name] = timestamp
+
+        # ---------------- EXIT ----------------
+
+        elif camera == "EXIT CAMERA":
+
+            if (
+                name not in last_exit
+                or (timestamp - last_exit[name]).total_seconds() > COOLDOWN
+            ):
+
+                logging.info(f"[EXIT] {name}")
+
+                send_attendance_to_backend(
+                    name=name,
+                    event_type="exit",
+                    timestamp=timestamp,
+                )
+
+                last_exit[name] = timestamp
+
+       # except Exception:
+        #    pass
 
 
 if __name__ == "__main__":
@@ -215,6 +260,8 @@ if __name__ == "__main__":
 
     entry_url = os.getenv("EXIT_CAMERA", "")
     exit_url = os.getenv("ENTRY_CAMERA", "")
+    #entry_url = os.getenv("ENTRY_CAMERA", "")
+    #exit_url = os.getenv("EXIT_CAMERA", "")
     logging.info(f"ENTRY CAMERA URL: {entry_url or 'NOT SET'}")
     logging.info(f"EXIT CAMERA URL:  {exit_url or 'NOT SET'}")
 

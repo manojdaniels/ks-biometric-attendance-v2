@@ -37,6 +37,7 @@ def load_known_faces():
 
     try:
         data = np.load(embeddings_path)
+        print(data['names'])
         known_names = data['names']
         known_embeddings = data['embeddings']
         norms = np.linalg.norm(known_embeddings, axis=1)

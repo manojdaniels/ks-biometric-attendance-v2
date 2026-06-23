@@ -1,38 +1,95 @@
 const User = require('../../modal/user/usermodal');
 const Attendance = require('../../modal/attendance/attendanceModel');
-// const moment = require('moment-timezone');
+
 exports.entryExit = async (req, res) => {
-  try {
-    const { type } = req.query;
-    const { name, entry, exit } = req.body;
-    const user = await User.findOne({ name: name });
-    if (!user) return res.status(400).json({ message: 'User not found' });
-    if (type == 'entry') {
-      const entry1 = await Attendance.create({
-        userId: user._id,
-        userName: user.name,
-        entryTime: entry,
-      });
-      // console.log(entry1, 'user1');
-    } else {
-      const user1 = await Attendance.findOne({
-        userId: user._id,
-      }).sort({ _id: -1 });
-      const entry2 = await Attendance.findOneAndUpdate(
-        {
-          _id: user1._id,
-        },
-        { $set: { exitTime: exit } },
-        { new: true, runValidators: true }
-      );
-// console.log(entry2, 'user')
+    try {
+
+        const { type } = req.query;
+        const { name, entry, exit } = req.body;
+
+        const user = await User.findOne({ name });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        //-----------------------------------
+        // ENTRY
+        //-----------------------------------
+
+        if (type === "entry") {
+
+            const existing = await Attendance.findOne({
+                userId: user._id,
+                $or: [
+                    { exitTime: null },
+                    { exitTime: { $exists: false } }
+                ]
+            });
+
+            if (existing) {
+                return res.status(200).json({
+                    message: "User already checked in"
+                });
+            }
+
+            await Attendance.create({
+                userId: user._id,
+                userName: user.name,
+                entryTime: entry
+            });
+
+            return res.status(200).json({
+                message: "Entry recorded"
+            });
+        }
+
+        //-----------------------------------
+        // EXIT
+        //-----------------------------------
+
+        if (type === "exit") {
+
+            const attendance = await Attendance.findOne({
+                userId: user._id,
+                $or: [
+                    { exitTime: null },
+                    { exitTime: { $exists: false } }
+                ]
+            }).sort({ entryTime: -1 });
+
+            if (!attendance) {
+                return res.status(400).json({
+                    message: "No active attendance found"
+                });
+            }
+
+            attendance.exitTime = exit;
+
+            await attendance.save();
+
+            return res.status(200).json({
+                message: "Exit recorded"
+            });
+        }
+
+        return res.status(400).json({
+            message: "Invalid attendance type"
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        return res.status(500).json({
+            message: err.message
+        });
     }
-    
-    return res.status(200).json({ message: ' Data Successfully inserted' });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
 };
+
+
 exports.getAttendance = async (req, res) => {
   try {
     const { id } = req.params;
@@ -53,40 +110,3 @@ exports.getAttendance = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
-
-// exports.getdailyData = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { startDate, endDate } = req.query;
-//     let query = { userId: id };
-
-//     if (startDate && endDate) {
-//       query.createdAt = {
-//         $gte: moment
-//           .tz(startDate, 'Asia/kolkata')
-//           .startOf('day')
-//           .utc()
-//           .toDate(),
-//         $lte: moment.tz(endDate, 'Asia/Kolkata').endOf('day').utc().toDate(),
-//       };
-//     } else {
-//       query.createdAt = {
-//         $gte: moment
-//           .tz(new Date(), 'Asia/kolkata')
-//           .startOf('day')
-//           .utc()
-//           .toDate(),
-//         $lte: moment.tz(new Date(), 'Asia/Kolkata').endOf('day').utc().toDate(),
-//       };
-
-      
-//     }
-
-//     const entry = await Attendance.find(query).sort({ _id: 1 }).limit(1);
-//     const exit = await Attendance.find(query).sort({ _id: -1 }).limit(1);
-
-//     return res.status(200).json({message:"First Entry and Last Exit",entry,exit})
-//   } catch (err) {
-//     return res.status(500).json({ message: err.message });
-//   }
-// };
