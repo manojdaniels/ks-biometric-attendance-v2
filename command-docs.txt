@@ -1,7 +1,7 @@
 VPN OFF>>> Important 
 
-backend: nodemon start
-frontend: npm run dev 
+backend: npm.cmd start ///		nodemon start 
+frontend: npm.cmd run dev -- --host 0.0.0.0 --port 5173 ///		npm run dev  /// 		
 
 cd att
 >>>Activate env
@@ -10,9 +10,25 @@ python -m venv venv
 .\venv\Scripts\activate.bat
 
 
-python /src/modeltry1
+python /src/ks-cam.py
+
+EMAIL=xyz@gmail.com
+PASSWORD=Admin@1234
+
+============================================
+MongoDB:
+
+MongoDB_URI=mongodb+srv://test-yt:jWiUHxyIPBuxMsW1@test.jcsgw.mongodb.net/attendance?retryWrites=true&w=majority
+PORT=8000
 
 
+MongoDB 
+mongodb+srv://test-yt:jWiUHxyIPBuxMsW1@test.jcsgw.mongodb.net/?appName=Test
+
+
+
+old values:
+MongoDB_URI=mongodb+srv://test-yt:jWiUHxyIPBuxMsW1@test.jcsgw.mongodb.net/?retryWrites=true&w=majority&appName=Test
 
 -------------------------------------
 MongoDB SQL query: 

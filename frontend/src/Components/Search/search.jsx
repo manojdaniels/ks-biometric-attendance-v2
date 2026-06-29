@@ -12,7 +12,7 @@ const Search = ({ onSearch }) => {
       search: searchTerm,
       format: "json"
     });
-    console.log(data); // setData(data.data) if needed
+    onSearch?.(data);
   } catch (err) {
     console.error(err.message);
   }

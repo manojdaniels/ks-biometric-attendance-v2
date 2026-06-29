@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 BACKEND_URL = os.getenv(
     "BACKEND_URL",
-    "http://localhost:8001/api"
+    "http://localhost:8000/api"
 )
 
 
@@ -63,11 +63,11 @@ def send_attendance_to_backend(
 
         if response.ok:
             logger.info(
-                f"{event_type.upper()} stored for {name}"
+                f"{event_type.upper()} response for {name}: {response.text}"
             )
         else:
             logger.warning(
-                "Backend returned an error."
+                f"Backend returned an error for {event_type.upper()} {name}: {response.text}"
             )
 
         return response

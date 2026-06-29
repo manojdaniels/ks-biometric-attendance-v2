@@ -73,8 +73,7 @@ function AddUser() {
         password: formData.password
       };
 
-      const userResponse = await createUser(userPayload);
-      // console.log("User created:", userResponse);
+      await createUser(userPayload);
 
       // 2️⃣ Upload images only if files selected
       if (files.length > 0) {

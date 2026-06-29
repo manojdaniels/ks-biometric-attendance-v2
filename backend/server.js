@@ -1,6 +1,5 @@
 require("dotenv").config()
 console.log("ENV FILE LOADED");
-console.log("MongoDB_URI =", process.env.MongoDB_URI);
 const express=require("express")
 const cors=require("cors")
 // const multer=require("multer")
@@ -31,15 +30,11 @@ app.use(morgan('dev'));
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 1000,
+    skip: (req) => req.path === '/health' || req.path === '/api/attendance/live',
   })
 );
 
-( async()=>{
-      await adminCreated()
-}
-)()
-  
 // }
 app.use('/health', (req, res) => {
     res.status(200).send({
@@ -51,6 +46,17 @@ app.use('/health', (req, res) => {
   app.use('/api',routing);
   connectDb()
   .then(()=>{
+    adminCreated();
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${port} is already in use. Stop the existing process or change PORT in .env.`);
+        return;
+      }
+
+      console.error(`Server error: ${err.message}`);
+    });
+
     server.listen(port,()=>{console.log(`server is running at ${port}`)})
 
   })

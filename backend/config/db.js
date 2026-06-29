@@ -7,9 +7,13 @@ const ConnectMongo = async() =>{
       await mongoose.connect(URI);
         console.log("connect to the mongodb");
     } catch (error) {
-        console.log(error);
-        process.exit(1);
-        
+        if (error.name === 'MongooseServerSelectionError') {
+            console.error('MongoDB connection failed. Check your internet connection and MongoDB Atlas Network Access IP allowlist.');
+            console.error(error.message);
+        } else {
+            console.error(error);
+        }
+        throw error;
     }
 
 }

@@ -11,6 +11,7 @@ from datetime import datetime
 from multiprocessing import Process, Event, Queue, shared_memory
 
 from dotenv import load_dotenv
+from flask import Flask, Response
 
 from camera_connect import connect_camera, kill_process_tree
 from backend_api import send_attendance_to_backend
@@ -28,6 +29,72 @@ FRAME_HEIGHT = 480
 CHANNELS = 3
 FRAME_SIZE = FRAME_WIDTH * FRAME_HEIGHT * CHANNELS
 SHM_SIZE = FRAME_SIZE + 8
+
+
+def start_camera_stream_server():
+    app = Flask(__name__)
+    streams = {
+        "entry": "ann_entry_camera",
+        "exit": "ann_exit_camera",
+    }
+
+    def stream_frames(shm_name):
+        shm = None
+        last_frame_id = -1
+
+        try:
+            shm = shared_memory.SharedMemory(name=shm_name)
+            while True:
+                frame_id = struct.unpack('Q', shm.buf[:8])[0]
+
+                if frame_id != last_frame_id:
+                    raw_frame = bytes(shm.buf[8:8 + FRAME_SIZE])
+                    frame = np.frombuffer(raw_frame, dtype=np.uint8).reshape(
+                        (FRAME_HEIGHT, FRAME_WIDTH, CHANNELS)
+                    )
+
+                    ok, encoded = cv2.imencode(".jpg", frame)
+                    if ok:
+                        last_frame_id = frame_id
+                        yield (
+                            b"--frame\r\n"
+                            b"Content-Type: image/jpeg\r\n\r\n" +
+                            encoded.tobytes() +
+                            b"\r\n"
+                        )
+
+                time.sleep(0.08)
+
+        except Exception as e:
+            logging.error(f"MJPEG stream error for {shm_name}: {e}")
+        finally:
+            if shm:
+                shm.close()
+
+    @app.get("/health")
+    def health():
+        return {"status": "UP"}
+
+    @app.get("/video/<camera>")
+    def video(camera):
+        shm_name = streams.get(camera)
+        if not shm_name:
+            return {"message": "Camera stream not found"}, 404
+
+        return Response(
+            stream_frames(shm_name),
+            mimetype="multipart/x-mixed-replace; boundary=frame"
+        )
+
+    host = os.getenv("CAMERA_UI_HOST", "0.0.0.0")
+    port = int(os.getenv("CAMERA_UI_PORT", "5055"))
+
+    threading.Thread(
+        target=lambda: app.run(host=host, port=port, threaded=True, use_reloader=False),
+        daemon=True,
+    ).start()
+
+    logging.info(f"Camera UI streams available at http://localhost:{port}/video/entry and /video/exit")
 
 
 def create_shared_memory(name):
@@ -183,7 +250,7 @@ def attendance_manager(result_queue, shutdown_event):
     last_entry = {}
     last_exit = {}
 
-    COOLDOWN = 5  # seconds
+    COOLDOWN = int(os.getenv("ATTENDANCE_EVENT_COOLDOWN_SECONDS", "300"))
 
     while not shutdown_event.is_set():
 
@@ -200,35 +267,16 @@ def attendance_manager(result_queue, shutdown_event):
         camera = data["camera"]
         timestamp = data["timestamp"]
 
-        # ---------------- ENTRY ----------------
-
-        if camera == "ENTRY CAMERA":
-
-            if (
-                name not in last_entry
-                or (timestamp - last_entry[name]).total_seconds() > COOLDOWN
-            ):
-
-                logging.info(f"[ENTRY] {name}")
-
-                send_attendance_to_backend(
-                    name=name,
-                    event_type="entry",
-                    timestamp=timestamp,
-                )
-
-                last_entry[name] = timestamp
-
         # ---------------- EXIT ----------------
 
-        elif camera == "EXIT CAMERA":
+        if camera == "ENTRY CAMERA":
 
             if (
                 name not in last_exit
                 or (timestamp - last_exit[name]).total_seconds() > COOLDOWN
             ):
 
-                logging.info(f"[EXIT] {name}")
+                logging.info(f"[{camera} -> EXIT] {name}")
 
                 send_attendance_to_backend(
                     name=name,
@@ -237,6 +285,25 @@ def attendance_manager(result_queue, shutdown_event):
                 )
 
                 last_exit[name] = timestamp
+
+        # ---------------- ENTRY ----------------
+
+        elif camera == "EXIT CAMERA":
+
+            if (
+                name not in last_entry
+                or (timestamp - last_entry[name]).total_seconds() > COOLDOWN
+            ):
+
+                logging.info(f"[{camera} -> ENTRY] {name}")
+
+                send_attendance_to_backend(
+                    name=name,
+                    event_type="entry",
+                    timestamp=timestamp,
+                )
+
+                last_entry[name] = timestamp
 
        # except Exception:
         #    pass
@@ -258,10 +325,10 @@ if __name__ == "__main__":
         logging.critical("Failed to allocate Shared Memory. Exiting.")
         exit(1)
 
-    entry_url = os.getenv("EXIT_CAMERA", "")
-    exit_url = os.getenv("ENTRY_CAMERA", "")
-    #entry_url = os.getenv("ENTRY_CAMERA", "")
-    #exit_url = os.getenv("EXIT_CAMERA", "")
+    start_camera_stream_server()
+
+    entry_url = os.getenv("ENTRY_CAMERA", "")
+    exit_url = os.getenv("EXIT_CAMERA", "")
     logging.info(f"ENTRY CAMERA URL: {entry_url or 'NOT SET'}")
     logging.info(f"EXIT CAMERA URL:  {exit_url or 'NOT SET'}")
 

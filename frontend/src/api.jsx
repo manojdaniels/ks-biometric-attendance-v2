@@ -11,7 +11,7 @@ const API = axios.create({
     // "Access-Control-Allow-Origin": "*",        
     // "Access-Control-Allow-Methods": "PUT,GET,POST,DELETE,OPTIONS,PATCH",        
     // 'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, token, access-control-allow-origin',
-   " x-api-key":"$2b$10$mBiSrdsIQZ/wSe6oVswYv.QIiZhTpL3U.E0.bnDtJnn.zu6GlrxWK"
+   "x-api-key":"$2b$10$mBiSrdsIQZ/wSe6oVswYv.QIiZhTpL3U.E0.bnDtJnn.zu6GlrxWK"
   }
 });
 
@@ -25,6 +25,27 @@ API.interceptors.request.use(config => {
   
   return config;
 }); 
+
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    const message = error.response?.data?.message;
+    const shouldRefresh = error.response?.data?.shouldRefresh;
+
+    if (status === 401 && (shouldRefresh || message === 'Token expired')) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('role');
+
+      if (window.location.pathname !== '/') {
+        window.location.replace('/');
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
 
  const registerUser = async (userData) => {
   try {
@@ -62,6 +83,47 @@ const getEmployeeData=async(id)=>{
   }
   catch(err){
    return err.response.data || {message:"User not found"}
+  }
+}
+
+const getLiveAttendance = async (limit = 25) => {
+  try {
+    const response = await API.get('/attendance/live', {
+      params: { limit },
+    });
+    return response.data;
+  } catch (err) {
+    return err.response?.data || { message: 'Failed to fetch live attendance', data: [] };
+  }
+}
+
+const getReportEmployees = async () => {
+  try {
+    const response = await API.get('/attendance/reports/employees');
+    return response.data;
+  } catch (err) {
+    return err.response?.data || { message: 'Failed to fetch report employees', data: [] };
+  }
+}
+
+const getAttendanceReport = async (params = {}) => {
+  try {
+    const response = await API.get('/attendance/reports', { params });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: 'Failed to fetch attendance report' };
+  }
+}
+
+const downloadAttendanceReport = async (params = {}) => {
+  try {
+    const response = await API.get('/attendance/reports', {
+      params: { ...params, format: 'csv' },
+      responseType: 'blob',
+    });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: 'Failed to download attendance report' };
   }
 }
 
@@ -196,5 +258,5 @@ const userCount= async(id)=>{
     return err.response?.data || { message: "Failed to fetch user count" };                             
   }
 }
-export {registerUser,loginUser,getEmployeeData,getUser,deleteUser,logoutUser,forgotPassword,getResetPassword,updateStatus,createUser
+export {registerUser,loginUser,getEmployeeData,getLiveAttendance,getReportEmployees,getAttendanceReport,downloadAttendanceReport,getUser,deleteUser,logoutUser,forgotPassword,getResetPassword,updateStatus,createUser
 ,addCamera,uploadImages,userCount};
